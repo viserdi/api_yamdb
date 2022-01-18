@@ -4,6 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
 
 from .permissions import IsAuthorOrAdminOrReadOnly
+from rest_framework import permissions
 from reviews.models import Category, Genre, Review, Title
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer,
@@ -22,6 +23,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     lookup_field = 'slug'
     pagination_class = PageNumberPagination
+    permission_classes = (permissions.AllowAny,)
 
 
 class GenreViewSet(viewsets.ModelViewSet):

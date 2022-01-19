@@ -27,7 +27,6 @@ def send_email_with_code(username):
 
 
 class APISignUp(APIView):
-    """Регистрация пользователя"""
     permission_classes = (AllowAny, )
 
     def post(self, request):
@@ -61,7 +60,6 @@ class APIGetToken(APIView):
 
 
 class APIUser(APIView):
-    """Работа со своими данными для пользователя"""
     def get(self, request, *args, **kwargs):
         user = get_object_or_404(User, username=request.user.username)
         serializer = CreateUserSerializer(user, many=False)

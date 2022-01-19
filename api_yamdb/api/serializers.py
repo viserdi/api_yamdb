@@ -1,6 +1,8 @@
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
+from rest_framework.validators import UniqueValidator
 
 from reviews.models import Category, Comment, Genre, Review, Title
+from users.models import User
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -44,3 +46,65 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'text', 'author', 'pub_date')
+
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        validators=[
+            UniqueValidator(queryset=User.objects.all())
+        ]
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role'
+        )
+        read_only_fields = ('role', )
+
+    def validate_username(self, value):
+        if value == 'me':
+            raise serializers.ValidationError(
+                'Нельзя использовать username "me"'
+            )
+        return value
+
+
+class CreateAdminSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        validators=[
+            UniqueValidator(queryset=User.objects.all())
+        ]
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role')
+
+    def validate_username(self, value):
+        if value == 'me':
+            raise serializers.ValidationError(
+                'Нельзя использовать username "me"'
+            )
+        return value
+
+
+class GetTokenSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        max_length=200,
+        required=True
+    )
+    confirmation_code = serializers.CharField(
+        max_length=200,
+        required=True
+    )
+
+    def validate_username(self, name):
+        if name == 'me':
+            raise serializers.ValidationError(
+                'Нельзя использовать username "me"'
+            )
+        if not User.objects.filter(username=name).exists():
+            raise exceptions.NotFound('Такого пользователя не существует')
+        return name

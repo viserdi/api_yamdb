@@ -46,7 +46,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         if Review.objects.filter(author=self.request.user,
                                  title=title).exists():
             raise ValidationError('Нельзя оставлять больше одного отзыва!')
-        serializer.save(author=self.user.request, title=title)
+        serializer.save(author=self.request.user, title=title)
 
 
 class CommentViewSet(viewsets.ModelViewSet):

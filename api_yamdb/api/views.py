@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, viewsets, permissions, mixins
+from rest_framework import filters, viewsets, mixins
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
 
@@ -12,7 +12,7 @@ from .serializers import (CategorySerializer, CommentSerializer,
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().order_by('name')
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
@@ -23,7 +23,7 @@ class CategoryViewSet(
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet
-                    ):
+):
     queryset = Category.objects.all().order_by('id')
     serializer_class = CategorySerializer
     lookup_field = 'slug'
@@ -38,7 +38,7 @@ class GenreViewSet(
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet
-        ):
+):
     queryset = Genre.objects.all().order_by('id')
     serializer_class = GenreSerializer
     lookup_field = 'slug'

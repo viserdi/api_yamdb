@@ -1,10 +1,9 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import filters, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
 
 from .permissions import IsAuthorOrAdminOrReadOnly, IsAdminOrReadOnly
-# from rest_framework import permissions
 from reviews.models import Category, Genre, Review, Title
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer,
@@ -25,6 +24,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     pagination_class = PageNumberPagination
     permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -33,6 +34,8 @@ class GenreViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     pagination_class = PageNumberPagination
     permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

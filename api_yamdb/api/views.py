@@ -3,9 +3,8 @@ from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
 
-from .pagination import CustomPagination
 from .permissions import IsAuthorOrAdminOrReadOnly, IsAdminOrReadOnly
-from rest_framework import permissions
+# from rest_framework import permissions
 from reviews.models import Category, Genre, Review, Title
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer,
@@ -17,7 +16,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = CustomPagination
+    pagination_class = PageNumberPagination
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -25,7 +24,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     lookup_field = 'slug'
     pagination_class = PageNumberPagination
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 class GenreViewSet(viewsets.ModelViewSet):

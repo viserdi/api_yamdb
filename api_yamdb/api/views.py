@@ -7,15 +7,22 @@ from .permissions import IsAdminOrReadOnly, IsAuthorOrAdminOrReadOnly
 from reviews.models import Category, Genre, Review, Title
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer,
-                          TitleSerializer
+                          TitleSerializer, CreateTitleSerializer
                           )
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all().order_by('name')
+    queryset = Title.objects.all()
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('=genre',)
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'partial_update'):
+            return CreateTitleSerializer
+        return TitleSerializer
 
 
 class CategoryViewSet(
@@ -24,13 +31,13 @@ class CategoryViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
-    queryset = Category.objects.all().order_by('id')
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
     pagination_class = PageNumberPagination
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ["=name"]
+    search_fields = ('=name',)
 
 
 class GenreViewSet(

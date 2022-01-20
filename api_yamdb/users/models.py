@@ -14,7 +14,7 @@ class NewUser(UserManager):
 
     def create_superuser(
             self, username, email, password, role='admin', **extra_fields
-        ):
+    ):
         return super().create_superuser(
             username, email, password, role='admin', **extra_fields
         )

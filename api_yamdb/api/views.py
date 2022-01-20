@@ -14,6 +14,10 @@ from .serializers import (CategorySerializer, CommentSerializer,
 
 
 class TitleViewSet(viewsets.ModelViewSet):
+    """
+    Управление произведениями доступно только админу,
+    остальные пользователи в режиме read only.
+    """
     queryset = Title.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
@@ -32,6 +36,10 @@ class CategoryViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
+    """
+    Управление категориями доступно только админу,
+    остальные пользователи в режиме read only.
+    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
@@ -47,6 +55,10 @@ class GenreViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
+    """
+    Управление жанрами доступно только админу,
+    остальные порльзователи в режиме read only.
+    """
     queryset = Genre.objects.all().order_by('id')
     serializer_class = GenreSerializer
     lookup_field = 'slug'
@@ -57,6 +69,10 @@ class GenreViewSet(
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
+    """
+    Управление всеми отзывами доступно только админу и модератору,
+    остальные пользователи могут управлять только своими отзывами.
+    """
     serializer_class = ReviewSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly,)
 
@@ -73,6 +89,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """
+    Управление всеми комментариями доступно только админу и модератору,
+    остальные пользователи могут управлять только своими комментариями.
+    """
     serializer_class = CommentSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly,)
 

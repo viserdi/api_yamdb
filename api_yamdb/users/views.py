@@ -28,6 +28,10 @@ def send_email_with_code(username, email):
 
 
 class APISignUp(APIView):
+    """
+    Создание пользователя с уникальными полями username и email,
+    отправка кода подтверждения на указанную почту.
+    """
     permission_classes = (AllowAny, )
 
     def post(self, request):
@@ -65,6 +69,10 @@ class APIGetToken(APIView):
 
 
 class APIUser(APIView):
+    """
+    Получение и изменение данных своей учетной записи,
+    доступно всем зарегистрированным пользователям.
+    """
     def get(self, request, *args, **kwargs):
         user = get_object_or_404(User, username=request.user.username)
         serializer = CreateUserSerializer(user, many=False)
@@ -81,6 +89,10 @@ class APIUser(APIView):
 
 
 class UserViewSetForAdmin(ModelViewSet):
+    """
+    Управление всеми учетными данными пользоваталей,
+    доступно только администратору.
+    """
     queryset = User.objects.all()
     serializer_class = CreateAdminSerializer
     lookup_field = 'username'

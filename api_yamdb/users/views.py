@@ -16,14 +16,15 @@ from api.serializers import (CreateAdminSerializer, CreateUserSerializer,
 from .models import User
 
 
-def send_email_with_code(username):
+def send_email_with_code(username, email):
     user = get_object_or_404(User, username=username)
     confirmation_code = default_token_generator.make_token(user)
     send_mail(
         subject='Код подтверждения',
         message=f'Ваш код {confirmation_code}',
         from_email=FROM_EMAIL,
-        recipient_list=['e@y.ru'])
+        recipient_list=[email]
+    )
 
 
 class APISignUp(APIView):
@@ -34,11 +35,14 @@ class APISignUp(APIView):
         if serializer.is_valid():
             serializer.save()
             send_email_with_code(
-                serializer.data['username'])
+                serializer.data['username'],
+                serializer.data['email']
+            )
             return Response(
                 {'email': serializer.data['email'],
                  'username': serializer.data['username']},
                 status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class APIGetToken(APIView):
@@ -57,6 +61,7 @@ class APIGetToken(APIView):
             return Response({
                 'confirmation code': 'Некорректный код подтверждения!'},
                 status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class APIUser(APIView):

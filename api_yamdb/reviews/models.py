@@ -13,6 +13,9 @@ class Category(models.Model):
                             unique=True,
                             db_index=True)
 
+    class Meta:
+        ordering = ('name',)
+
     def __str__(self):
         return self.name
 
@@ -25,6 +28,9 @@ class Genre(models.Model):
                             blank=False,
                             unique=True,
                             db_index=True)
+
+    class Meta:
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -59,6 +65,9 @@ class Title(models.Model):
         null=True,
         blank=True
     )
+
+    class Meta:
+        ordering = ('-year',)
 
     def __str__(self):
         return self.name

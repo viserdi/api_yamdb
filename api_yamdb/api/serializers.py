@@ -10,7 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('name', 'slug')
         model = Category
-        lookup_field = 'slug'
+        # lookup_field = 'slug'
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -34,7 +34,6 @@ class TitleSerializer(serializers.ModelSerializer):
     def get_rating(self, obj):
         rating = obj.reviews.aggregate(Avg('score'))
         return rating.get('score__avg')
-
 
 
 class ReviewSerializer(serializers.ModelSerializer):

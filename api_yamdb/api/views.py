@@ -2,7 +2,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets, mixins
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
+from django_filters.rest_framework import DjangoFilterBackend
 
+from .filters import TitleGenreFilter
 from .permissions import IsAdminOrReadOnly, IsAuthorOrAdminOrReadOnly
 from reviews.models import Category, Genre, Review, Title
 from .serializers import (CategorySerializer, CommentSerializer,
@@ -13,11 +15,10 @@ from .serializers import (CategorySerializer, CommentSerializer,
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
-    serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('=genre',)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleGenreFilter
 
     def get_serializer_class(self):
         if self.action in ('create', 'partial_update'):
@@ -52,7 +53,7 @@ class GenreViewSet(
     pagination_class = PageNumberPagination
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
+    search_fields = ('=name',)
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

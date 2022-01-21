@@ -17,6 +17,9 @@ from .models import User
 
 
 def send_email_with_code(username, email):
+    """
+    Созданиие и отправка кода подтверждения на указанную почту.
+    """
     user = get_object_or_404(User, username=username)
     confirmation_code = default_token_generator.make_token(user)
     send_mail(

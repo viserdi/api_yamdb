@@ -1,16 +1,13 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+from .validators import year_validator
 from users.models import User
 
 
 class Category(models.Model):
-    name = models.TextField('Название',
-                            blank=False,
-                            max_length=50)
-    slug = models.SlugField('slug',
-                            blank=False,
-                            unique=True,
-                            db_index=True)
+    name = models.TextField('Название', max_length=50)
+    slug = models.SlugField('slug', unique=True, db_index=True)
 
     class Meta:
         ordering = ('name',)
@@ -20,13 +17,8 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.TextField('Название',
-                            blank=False,
-                            max_length=50)
-    slug = models.SlugField('slug',
-                            blank=False,
-                            unique=True,
-                            db_index=True)
+    name = models.TextField('Название', max_length=50)
+    slug = models.SlugField('slug', unique=True, db_index=True)
 
     class Meta:
         ordering = ('name',)
@@ -36,13 +28,10 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    name = models.TextField(
-        'Название',
-        blank=False,
-        max_length=50,
-        db_index=True
+    name = models.TextField('Название', max_length=50, db_index=True)
+    year = models.PositiveSmallIntegerField(
+        blank=True, validators=[year_validator]
     )
-    year = models.IntegerField(blank=True)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -81,7 +70,10 @@ class Review(models.Model):
         verbose_name='Автор отзыва'
     )
     score = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        validators=[
+            MinValueValidator(1, 'Оценка должна быть не меньше 1.'),
+            MaxValueValidator(10, 'Оценка должна быть не больше 10.')
+        ],
         verbose_name='Рейтинг'
     )
     pub_date = models.DateTimeField(

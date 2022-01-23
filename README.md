@@ -38,3 +38,8 @@ ____
 4) Выполнить миграции:
 
 `python3 manage.py migrate`
+
+## **Разработчики группового проекта:**
+- _Ивашинин Иван_  https://github.com/viserdi
+- _Бритвин Павел_  https://github.com/pashwf
+- _Слонова Анна_   https://github.com/AnnSonrisa

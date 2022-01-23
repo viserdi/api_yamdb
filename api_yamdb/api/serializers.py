@@ -76,9 +76,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class CreateUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        validators=[
-            UniqueValidator(queryset=User.objects.all())
-        ]
+        validators=(
+            UniqueValidator(queryset=User.objects.all(),
+                            message='Данный e-mail уже существует!'),
+        )
     )
 
     class Meta:

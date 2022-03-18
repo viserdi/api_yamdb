@@ -41,5 +41,5 @@ ____
 
 ## **Разработчики группового проекта:**
 - Ivashinin Ivan https://github.com/viserdi
-- Britvin Pavel  https://github.com/pashwf https://git
+- Britvin Pavel  https://github.com/pashwf
 - Slonova Anna   https://github.com/AnnSonrisa
